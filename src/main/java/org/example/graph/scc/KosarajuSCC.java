@@ -1,11 +1,16 @@
-package org.example;
+package org.example.graph.scc;
+
+import org.example.graph.Graph;
+import org.example.graph.Edge;
+import org.example.Metrics;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-class KosarajuSCC {
+
+public class KosarajuSCC {
     private Graph g;
     private Metrics metrics;
     private boolean[] visited;
@@ -15,7 +20,8 @@ class KosarajuSCC {
     private int sccCount;
     private Graph condensationGraph;
 
-    KosarajuSCC(Graph g, Metrics metrics) {
+
+    public KosarajuSCC(Graph g, Metrics metrics) {
         this.g = g;
         this.metrics = metrics;
         this.visited = new boolean[g.V];
@@ -23,6 +29,7 @@ class KosarajuSCC {
         this.finishStack = new Stack<>();
         this.sccs = new ArrayList<>();
     }
+
 
     public void run() {
         for (int i = 0; i < g.V; i++) {
@@ -48,8 +55,9 @@ class KosarajuSCC {
         buildCondensationGraph();
     }
 
+
     private void dfs1(int u) {
-        metrics.increment("scc.dfs1.visits"); // [cite: 35]
+        metrics.increment("scc.dfs1.visits");
         visited[u] = true;
         for (Edge e : g.adj.get(u)) {
             metrics.increment("scc.dfs1.edges");
@@ -59,6 +67,7 @@ class KosarajuSCC {
         }
         finishStack.push(u);
     }
+
 
     private void dfs2(Graph gT, int u, List<Integer> currentScc) {
         metrics.increment("scc.dfs2.visits");
@@ -72,6 +81,7 @@ class KosarajuSCC {
             }
         }
     }
+
 
     private void buildCondensationGraph() {
         condensationGraph = new Graph(sccCount);
@@ -87,7 +97,19 @@ class KosarajuSCC {
         }
     }
 
-    public List<List<Integer>> getSccs() { return sccs; }
-    public Graph getCondensationGraph() { return condensationGraph; }
-    public int getSccId(int nodeId) { return sccMap[nodeId]; }
+
+    public List<List<Integer>> getSccs() { 
+        return sccs; 
+    }
+
+
+    public Graph getCondensationGraph() { 
+        return condensationGraph; 
+    }
+
+
+    public int getSccId(int nodeId) { 
+        return sccMap[nodeId]; 
+    }
 }
+

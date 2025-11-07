@@ -1,21 +1,28 @@
-package org.example;
+package org.example.graph.topo;
+
+import org.example.graph.Graph;
+import org.example.graph.Edge;
+import org.example.Metrics;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-class TopologicalSort {
+
+public class TopologicalSort {
     private Graph g;
     private Metrics metrics;
     private Stack<Integer> stack;
     private int[] states;
 
-    TopologicalSort(Graph g, Metrics metrics) {
+
+    public TopologicalSort(Graph g, Metrics metrics) {
         this.g = g;
         this.metrics = metrics;
         this.stack = new Stack<>();
         this.states = new int[g.V];
     }
+
 
     public List<Integer> run() {
         for (int i = 0; i < g.V; i++) {
@@ -35,13 +42,13 @@ class TopologicalSort {
 
     private boolean hasCycleDfs(int u) {
         metrics.increment("topo.dfs.visits");
-        states[u] = 1; // Mark as visiting
+        states[u] = 1;
 
         for (Edge e : g.adj.get(u)) {
             metrics.increment("topo.dfs.edges");
             int v = e.to;
             if (states[v] == 1) {
-                return true; // Cycle!
+                return true;
             }
             if (states[v] == 0) {
                 if (hasCycleDfs(v)) {
@@ -50,8 +57,9 @@ class TopologicalSort {
             }
         }
 
-        states[u] = 2; // Mark as visited
+        states[u] = 2;
         stack.push(u);
         return false;
     }
 }
+
